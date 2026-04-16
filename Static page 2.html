@@ -15,7 +15,7 @@
         height: 100vh;
     }
 
-    /* Main container */
+    /*Main container*/
     .dashboard {
         width: 900px;
         background: white;
@@ -25,7 +25,7 @@
         position: relative;
     }
 
-    /* Topbar */
+    /*Topbar*/
     .topbar {
         display: flex;
         justify-content: space-between;
@@ -39,26 +39,28 @@
         border: 1px solid #ccc;
     }
 
-    /* Title */
+    /*Title*/
     h1 {
         font-size: 20px;
         margin-bottom: 40px;
     }
 
-    /* Card container */
+    /*Card container*/
     .cards {
         display: grid;
         grid-template-columns: repeat(3, 1fr);
         gap: 15px;
     }
 
-    /* Card */
+    /*Card*/
     .card {
         background: #e5e7eb;
         padding: 40px;
         border-radius: 12px;
         cursor: pointer;
         transition: 0.3s;
+        min-height: 200px;
+
     }
 
     .card:hover {
@@ -66,7 +68,7 @@
         transform: translateY(-3px);
     }
 
-    /* Floating button */
+    /*Floating button*/
     .add-btn {
         position: absolute;
         bottom: 20px;
@@ -92,7 +94,7 @@
 
 <div class="dashboard">
 
-    <!-- Topbar -->
+    <!--topbar-->
     <div class="topbar">
         <div>AssignMate</div>
         <input type="text" placeholder="Search 🔍︎">
@@ -101,17 +103,17 @@
     </div>
 
 
-    <!-- Title -->
+    <!--title-->
     <h1>LCT 1113 - Critical Thinking's Assignments</h1>
 
-    <!-- Cards -->
+    <!--cards-->
     <div class="cards">
-        <div class="card">CSP1123 - Mini IT Project</div>
-        <div class="card">CDS1114 - Introduction to Digital Systems</div>
-        <div class="card">CSP1133 - Data Structures and Algorithms</div>
+        <div class="card">Blended Learning Week 2</div>
+        <div class="card">20% Presentation</div>
+        <div class="card">Debate Points</div>
     </div>
 
-    <!-- Add Button -->
+    <!--Addbutton-->
     <button class="add-btn">+</button>
 
 </div>
