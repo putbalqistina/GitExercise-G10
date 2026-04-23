@@ -60,7 +60,7 @@ def register():
 
         conn = get_db()
 
-        # 🔍 Check if email already exists
+        # Check if email already exists
         existing_user = conn.execute(
             "SELECT * FROM users WHERE email = ? OR username = ?",
             (email, username)
@@ -77,7 +77,7 @@ def register():
         conn.commit()
         conn.close()
 
-        return redirect("/")
+        return redirect("/login")
 
     return render_template("register.html")
 
