@@ -17,9 +17,26 @@ def init_db():
         CREATE TABLE IF NOT EXISTS users (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
             email TEXT NOT NULL,
-            password TEXT NOT NULL
+            password TEXT NOT NULL,
+            full_name TEXT,
+            username TEXT,
+            bio TEXT,
+            gender TEXT,
+            profile_pic TEXT
         )
     ''')
+
+    conn.execute('''
+        CREATE TABLE IF NOT EXISTS assignments (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            subject TEXT NOT NULL,
+            title TEXT NOT NULL,
+            deadline TEXT NOT NULL,
+            user_email TEXT NOT NULL,
+            FOREIGN KEY (user_email) REFERENCES users (email)
+        )
+    ''') 
+
     conn.commit()
     conn.close()
 
@@ -65,12 +82,57 @@ def register():
 
     return render_template("register.html")
 
-@app.route("/edit-profile")
-
+@app.route("/edit-profile", methods=["GET", "POST"])
 def edit_profile():
+    user_email = session.get('user')
+    if not user_email:
+        return redirect("/")
+
+    if request.method == "POST":
+        # Get data from the HTML form
+        name = request.form.get("full_name")
+        username = request.form.get("username")
+        bio = request.form.get("bio")
+        gender = request.form.get("gender")
+        
+        conn = get_db()
+        # We use WHERE email = ? to target ONLY the logged-in user
+        conn.execute('''
+            UPDATE users 
+            SET full_name = ?, username = ?, bio = ?, gender = ?
+            WHERE email = ?''', 
+            (name, username, bio, gender, user_email)
+        )
+        conn.commit()
+        conn.close()
+        return "Profile Updated Successfully! ✅"
 
     return render_template("index.html")
 
+@app.route('/add_assignment', methods=['GET', 'POST'])
+def add_assignment():
+    user_email = session.get('user')
+    if not user_email:
+        return redirect("/")
+
+    if request.method == 'POST':
+        # Retrieve data from the HTML form 'name' attributes
+        subject = request.form.get('subject')
+        title = request.form.get('title')
+        deadline = request.form.get('deadline')
+        
+        # Connect to DB and insert the record
+        conn = get_db()
+        conn.execute(
+            "INSERT INTO assignments (subject, title, deadline, user_email) VALUES (?, ?, ?, ?)",
+            (subject, title, deadline, user_email)
+        )
+        conn.commit()
+        conn.close()
+
+        return "Assignment added successfully! <a href='/edit-profile'>Back to Dashboard</a>"
+
+    return render_template("Static page 2.html")
 
 
 if __name__ == "__main__":

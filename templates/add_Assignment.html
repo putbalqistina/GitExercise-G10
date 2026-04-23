@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AssignMate | Add New Assignment</title>
+    <link rel="stylesheet" href="style-add_assignment.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+
+    <div class="container">
+        <header>
+            <div class="logo">
+            </span> <strong>AssignMate</strong>
+            </div>
+            <div class="nav-tools">
+                <div class="search-bar">
+                    <input type="text" placeholder="Search 🔍︎">
+                </div>
+                <span>Notifications</span>
+                <div class="filter">Filter ⌄</div>
+                <span class="settings-icon">⚙️</span>
+            </div>
+        </header>
+
+        <main>
+            <h1>ADD NEW ASSIGNMENT</h1>
+
+            <form class="assignment-form">
+                <div class="row">
+                    <div class="input-group">
+                        <label>Subject*</label>
+                        <input type="text" placeholder="Enter subject name" required>
+                    </div>
+                    <div class="input-group">
+                        <label>Assignment Title*</label>
+                        <input type="text" placeholder="Enter assignment or project name" required>
+                    </div>
+                </div>
+
+                <div class="input-group">
+                    <label>Description*</label>
+                    <input type="text" placeholder="Description/note" ></input>
+                </div>
+
+                <div class="deadline-container">
+                   <div class="input-group">
+                    <label>Deadline*</label>
+                    <input type="date" class="deadline-input" required>
+                    </div>
+                </div>
+
+                <div class="button-group">
+                    <button type="button" class="btn-cancel">CANCEL</button>
+                    <button type="submit" class="btn-add">ADD ASSIGNMENT</button>
+                </div>
+            </form>
+        </main>
+    </div>
+
+</body>
+</html>
