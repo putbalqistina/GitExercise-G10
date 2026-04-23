@@ -43,6 +43,22 @@ def init_db():
 
 init_db()
 
+# dummy subjects
+subjects = [
+    {"code": "CSP1123", "name": "Mini IT Project"},
+    {"code": "CDS1114", "name": "Digital Systems"},
+    {"code": "CMT1134", "name": "Mathematics III"},
+    {"code": "LCT1113", "name": "Critical Thinking"}
+]
+
+# dummy assignments
+assignments_data = {
+    "CSP1123": ["Proposal", "Final Report"],
+    "CDS1114": ["Lab 1", "Lab 2"],
+    "CMT1134": ["Quiz 1", "Test 2"],
+    "LCT1113": ["Blended Learning Week 2", "20% Presentation", "Debate Points"]
+}
+
 @app.route("/")
 def home():
     return render_template("login.html")
@@ -51,7 +67,6 @@ def home():
 def login():
     email = request.form["email"]
     password = request.form["password"]
-
     conn = get_db()
     user = conn.execute(
         "SELECT * FROM users WHERE email=? AND password=?",
@@ -82,6 +97,17 @@ def register():
         return redirect("/")
 
     return render_template("register.html")
+
+@app.route('/dashboard')
+def dashboard():
+    return render_template('dashboard.html', subjects=subjects)
+
+
+@app.route('/subject/<code>')
+def subject(code):
+    assignments = assignments_data.get(code, [])
+    return render_template('subject.html', code=code, assignments=assignments)
+
 
 @app.route("/edit-profile", methods=["GET", "POST"])
 def edit_profile():
@@ -133,41 +159,7 @@ def add_assignment():
 
         return "Assignment added successfully! <a href='/edit-profile'>Back to Dashboard</a>"
 
-    return render_template("Static page 2.html")
-
-
-if __name__ == "__main__":
-
-from flask import Flask, render_template
-
-app = Flask(__name__)
-
-# dummy subjects
-subjects = [
-    {"code": "CSP1123", "name": "Mini IT Project"},
-    {"code": "CDS1114", "name": "Digital Systems"},
-    {"code": "CMT1134", "name": "Mathematics III"},
-    {"code": "LCT1113", "name": "Critical Thinking"}
-]
-
-# dummy assignments
-assignments_data = {
-    "CSP1123": ["Proposal", "Final Report"],
-    "CDS1114": ["Lab 1", "Lab 2"],
-    "CMT1134": ["Quiz 1", "Test 2"],
-    "LCT1113": ["Blended Learning Week 2", "20% Presentation", "Debate Points"]
-}
-
-
-@app.route('/dashboard')
-def dashboard():
-    return render_template('dashboard.html', subjects=subjects)
-
-
-@app.route('/subject/<code>')
-def subject(code):
-    assignments = assignments_data.get(code, [])
-    return render_template('subject.html', code=code, assignments=assignments)
+    return render_template("add_assignment.html")
 
 
 if __name__ == '__main__':
