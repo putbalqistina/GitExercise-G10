@@ -1,6 +1,11 @@
 body {
     font-family: Arial, sans-serif;
-    background: #f2f2f2;
+    background: url("/static/images/login_bg.png");
+    height: 90vh;
+    background-size: cover;        /* fill screen */
+    background-position: center;   /* center image */
+    background-repeat: no-repeat;  /* no tiling */
+
 }
 
 .container {
@@ -47,6 +52,16 @@ button {
 }
 
 .secondary {
-    background: #ddd;
+    background: #fee9b3;
     color: black;
+}
+
+.popup {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    background: red;
+    color: white;
+    padding: 15px 20px;
+    border-radius: 8px;
 }

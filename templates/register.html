@@ -6,14 +6,24 @@
 </head>
 <body>
 
+ {% if error %}
+ <div class="popup">
+    {{ error }}
+ </div>
+ {% endif %}
+    
 <div class="container">
     <h2>Create Account</h2>
 
     <form method="POST">
-        <label>Email</label>
+
+        <label>Username*:</label>
+        <input type="text" name="username" required>
+
+        <label>Email*:</label>
         <input type="email" name="email" required>
 
-        <label>Password</label>
+        <label>Password*:</label>
         <input type="password" name="password" required>
 
         <button type="submit">Register</button>
