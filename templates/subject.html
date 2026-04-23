@@ -25,10 +25,13 @@
     <!-- Cards -->
     <div class="cards">
         {% for assignment in assignments %}
+        <a href="/assignment/{{ assignment }}">
             <div class="card">
                 {{ assignment }}
             </div>
-        {% endfor %}
+        </a>
+    {% endfor %}
+
     </div>
 
 </div>
