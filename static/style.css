@@ -1,6 +1,11 @@
 body {
     font-family: Arial, sans-serif;
-    background: #FFFBEF;
+    background: url("/static/images/login_bg.png");
+    height: 90vh;
+    background-size: cover;        /* fill screen */
+    background-position: center;   /* center image */
+    background-repeat: no-repeat;  /* no tiling */
+
 }
 
 .container {
@@ -47,7 +52,7 @@ button {
 }
 
 .secondary {
-    background: #ddd;
+    background: #fee9b3;
     color: black;
 }
 

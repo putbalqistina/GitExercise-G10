@@ -14,11 +14,12 @@ def get_db():
 def init_db():
     conn = get_db()
     conn.execute('''
-        CREATE TABLE IF NOT EXISTS users (
-            id INTEGER PRIMARY KEY AUTOINCREMENT,
-            email TEXT NOT NULL,
-            password TEXT NOT NULL
-        )
+    CREATE TABLE IF NOT EXISTS users (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    username TEXT UNIQUE,
+    email TEXT NOT NULL UNIQUE,
+    password TEXT NOT NULL
+    )
     ''')
     conn.commit()
     conn.close()
@@ -32,19 +33,19 @@ def home():
 @app.route("/login", methods=["GET", "POST"])
 def login():
     if request.method == "POST":
-        email = request.form["email"].strip().lower()
+        login = request.form["login"].strip().lower()
         password = request.form["password"]
 
         conn = get_db()
         user = conn.execute(
-            "SELECT * FROM users WHERE email=? AND password=?",
-            (email, password)
+            "SELECT * FROM users WHERE (email = ? OR username = ?) AND password = ?",
+            (login.lower(), login, password)
         ).fetchone()
         conn.close()
 
         if user:
-            session["user"] = email
-            return redirect("/dashboard")
+            session["user"] = login
+            return "Login Successful"
         else:
             return "Invalid credentials ❌"
 
@@ -53,6 +54,7 @@ def login():
 @app.route("/register", methods=["GET", "POST"])
 def register():
     if request.method == "POST":
+        username = request.form["username"].strip()
         email = request.form["email"].strip().lower()
         password = request.form["password"]
 
@@ -60,8 +62,8 @@ def register():
 
         # 🔍 Check if email already exists
         existing_user = conn.execute(
-            "SELECT * FROM users WHERE email = ?",
-            (email,)
+            "SELECT * FROM users WHERE email = ? OR username = ?",
+            (email, username)
         ).fetchone()
 
         if existing_user:
@@ -69,8 +71,8 @@ def register():
             return render_template("register.html", error="Email already registered!")
 
         conn.execute(
-            "INSERT INTO users (email, password) VALUES (?, ?)",
-            (email, password)
+            "INSERT INTO users (username, email, password) VALUES (?, ?, ?)",
+            (username, email, password)
         )
         conn.commit()
         conn.close()
