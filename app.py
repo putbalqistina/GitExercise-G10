@@ -184,7 +184,9 @@ def add_assignment():
         conn.commit()
         conn.close()
 
-        return "Assignment added successfully! <a href='/edit-profile'>Back to Dashboard</a>"
+        flash("Assignment has been added successfully!", "success")
+        
+        return redirect('/dashboard')
 
     return render_template("add_assignment.html")
 
