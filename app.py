@@ -115,6 +115,9 @@ def register():
         return redirect("/")
 
     return render_template("register.html")
+@app.route('/add-assignment')
+def add_assignment():
+    return "<h1>Page Not Found (UI coming soon)</h1>"
 
 @app.route('/dashboard')
 def dashboard():
@@ -125,61 +128,6 @@ def dashboard():
 def subject(code):
     assignments = assignments_data.get(code, [])
     return render_template('subject.html', code=code, assignments=assignments)
-
-
-@app.route("/edit-profile", methods=["GET", "POST"])
-def edit_profile():
-    user_email = session.get('user')
-    if not user_email:
-        return redirect("/")
-
-    if request.method == "POST":
-        # Get data from the HTML form
-        name = request.form.get("full_name")
-        username = request.form.get("username")
-        bio = request.form.get("bio")
-        gender = request.form.get("gender")
-        
-        conn = get_db()
-        # We use WHERE email = ? to target ONLY the logged-in user
-        conn.execute('''
-            UPDATE users 
-            SET full_name = ?, username = ?, bio = ?, gender = ?
-            WHERE email = ?''', 
-            (name, username, bio, gender, user_email)
-        )
-        conn.commit()
-        conn.close()
-        return "Profile Updated Successfully! ✅"
-
-    return render_template("index.html")
-
-@app.route('/add_assignment', methods=['GET', 'POST'])
-def add_assignment():
-    user_email = session.get('user')
-    if not user_email:
-        return redirect("/")
-
-    if request.method == 'POST':
-        # Retrieve data from the HTML form 'name' attributes
-        subject = request.form.get('subject')
-        title = request.form.get('title')
-        deadline = request.form.get('deadline')
-        
-        # Connect to DB and insert the record
-        conn = get_db()
-        conn.execute(
-            "INSERT INTO assignments (subject, title, deadline, user_email) VALUES (?, ?, ?, ?)",
-            (subject, title, deadline, user_email)
-        )
-        conn.commit()
-        conn.close()
-
-        flash("Assignment has been added successfully!", "success")
-        
-        return redirect('/dashboard')
-
-    return render_template("add_assignment.html")
 
 
 if __name__ == '__main__':
