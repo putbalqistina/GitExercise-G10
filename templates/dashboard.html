@@ -9,6 +9,8 @@
 
 <body>
 
+    
+<button class="add-btn" onclick="window.location.href='/add-assignment'">+</button>
 <div class="dashboard">
 
     <!-- Topbar -->
@@ -24,6 +26,7 @@
 
     <!-- Cards -->
     <div class="cards">
+     {%if subjects %}
         {% for subject in subjects %}
             <a href="/subject/{{ subject.code }}">
                 <div class="card">
@@ -31,6 +34,9 @@
                 </div>
             </a>
         {% endfor %}
+        {% else %}
+        <p> No Assignments yet. Click + to add.</p>
+        {% endif %}
     </div>
 
 </div>

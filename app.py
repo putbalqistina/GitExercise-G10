@@ -18,6 +18,9 @@ assignments_data = {
     "LCT1113": ["Blended Learning Week 2", "20% Presentation", "Debate Points"]
 }
 
+@app.route('/add-assignment')
+def add_assignment():
+    return "<h1>Page Not Found (UI coming soon)</h1>"
 
 @app.route('/dashboard')
 def dashboard():
