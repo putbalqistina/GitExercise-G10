@@ -115,9 +115,31 @@ def register():
         return redirect("/")
 
     return render_template("register.html")
-@app.route('/add-assignment')
+
+@app.route('/add_assignment', methods=['GET', 'POST'])
 def add_assignment():
-    return "<h1>Page Not Found (UI coming soon)</h1>"
+    user_email = session.get('user')
+    if not user_email:
+        return redirect("/login")
+
+    if request.method == 'POST':
+        # Retrieve data from the HTML form 'name' attributes
+        subject = request.form.get('subject')
+        title = request.form.get('title')
+        deadline = request.form.get('deadline')
+        
+        # Connect to DB and insert the record
+        conn = get_db()
+        conn.execute(
+            "INSERT INTO assignments (subject, title, deadline, user_email) VALUES (?, ?, ?, ?)",
+            (subject, title, deadline, user_email)
+        )
+        conn.commit()
+        conn.close()
+
+        return redirect("/dashboard")
+
+    return render_template("add_assignment.html")
 
 @app.route('/dashboard')
 def dashboard():
@@ -129,6 +151,32 @@ def subject(code):
     assignments = assignments_data.get(code, [])
     return render_template('subject.html', code=code, assignments=assignments)
 
+@app.route("/edit_profile", methods=["GET", "POST"])
+def edit_profile():
+    if "user" not in session:
+        return redirect(url_for("login"))
+
+    user_email = session["user"]
+    conn = get_db()
+
+    if request.method == "POST":
+        full_name = request.form.get("full_name")
+        bio = request.form.get("bio")
+        gender = request.form.get("gender")
+        
+        conn.execute('''
+            UPDATE users 
+            SET full_name = ?, bio = ?, gender = ? 
+            WHERE email = ?
+        ''', (full_name, bio, gender, user_email))
+        conn.commit()
+        conn.close()
+        return redirect(url_for("dashboard"))
+
+    # get user data to pre-fill the form
+    user_data = conn.execute("SELECT * FROM users WHERE email = ?", (user_email,)).fetchone()
+    conn.close()
+    return render_template("index.html", user=user_data)
 
 if __name__ == '__main__':
     app.run(debug=True)
