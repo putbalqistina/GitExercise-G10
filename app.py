@@ -1,6 +1,8 @@
-from flask import Flask, render_template
+from flask import Flask, render_template, request, redirect, url_for
 
 app = Flask(__name__)
+
+app.config['UPLOAD_FOLDER'] = 'static/uploads'
 
 # dummy subjects
 subjects = [
@@ -10,6 +12,13 @@ subjects = [
     {"code": "LCT1113", "name": "Critical Thinking"}
 ]
 
+assignment_store = {
+    "Proposal": {
+        "description": "This is assignment description",
+        "comments": ["my part - done", "need to finish before 20/4"],
+        "attachment": None
+    }
+}
 # dummy assignments
 assignments_data = {
     "CSP1123": ["Proposal", "Final Report"],
@@ -46,6 +55,49 @@ def assignment(title):
         description=description,
         comments=comments,
         attachment=attachment
+    )
+
+import os
+
+@app.route('/assignment/<title>', methods=["GET", "POST"])
+def assignment(title):
+
+    if title not in assignment_store:
+        assignment_store[title] = {
+            "description": "",
+            "comments": [],
+            "attachment": None
+        }
+
+    data = assignment_store[title]
+
+    if request.method == "POST":
+
+        # update description
+        new_desc = request.form.get("description")
+        if new_desc:
+            data["description"] = new_desc
+
+        # add comment
+        new_comment = request.form.get("comment")
+        if new_comment:
+            data["comments"].append(new_comment)
+
+        # file upload
+        file = request.files.get("file")
+        if file and file.filename != "":
+            path = os.path.join(app.config['UPLOAD_FOLDER'], file.filename)
+            file.save(path)
+            data["attachment"] = file.filename
+
+        return redirect(url_for("assignment", title=title))
+
+    return render_template(
+        "assignment.html",
+        title=title,
+        description=data["description"],
+        comments=data["comments"],
+        attachment=data["attachment"]
     )
 
 
